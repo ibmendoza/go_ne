@@ -1,1 +1,11 @@
-config/test-tasks.yaml
+servergroups:
+  web:
+    - host: 192.168.1.102
+      username: "root"
+      password: "putYourPasswordHere"
+      port: 22
+
+tasks:
+  setup:
+    steps:
+      - command: cd /home && ./anchor cmdfile.txt
