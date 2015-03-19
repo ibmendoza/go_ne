@@ -2,7 +2,7 @@ servergroups:
   web:
     - host: 192.168.1.102
       username: "root"
-      password: "putYourPasswordHere"
+      password: "YourPasswordHere"
       port: 22
 
 tasks:
