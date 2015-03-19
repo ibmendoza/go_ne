@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/daviddengcn/go-colortext"
 	"github.com/gophergala/go_ne/core"
-	"github.com/mgutz/ansi"
+	//"github.com/mgutz/ansi"
 )
 
 var (
@@ -15,6 +16,18 @@ var (
 	configFile = flag.String("config", ".kiss.yml", "path to config file")
 	group      = flag.String("group", "", "defines the server group for which the task should run")
 )
+
+func printOutput(str string, a ...interface{}) {
+	ct.ChangeColor(ct.Green, false, ct.None, false)
+	fmt.Println(fmt.Sprintf(str, a))
+	ct.ResetColor()
+}
+
+func printError(str string, a ...interface{}) {
+	ct.ChangeColor(ct.Red, false, ct.None, false)
+	fmt.Println(fmt.Sprintf(str, a))
+	ct.ResetColor()
+}
 
 func main() {
 	flag.Parse()
@@ -36,9 +49,12 @@ func main() {
 		fail(err)
 	}
 
-	fmt.Println(ansi.Color(fmt.Sprintf("Running tasks for group `%v`", *group), "green"))
+	//fmt.Println(ansi.Color(fmt.Sprintf("Running tasks for group `%v`", *group), "green"))
+	printOutput("Running tasks for group `%v`", *group)
+
 	for _, host := range hosts {
-		fmt.Println(ansi.Color(fmt.Sprintf("Selecting host `%v`", host.Host), "green"))
+		//fmt.Println(ansi.Color(fmt.Sprintf("Selecting host `%v`", host.Host), "green"))
+		printOutput("Selecting host `%v`", host.Host)
 
 		var runner core.Runner
 		if host.RunLocally {
@@ -55,12 +71,15 @@ func main() {
 			}
 		}
 
-		fmt.Println(ansi.Color(fmt.Sprintf("Executing `%v`", *taskName), "green"))
+		//fmt.Println(ansi.Color(fmt.Sprintf("Executing `%v`", *taskName), "green"))
+		printOutput("Executing `%v`", *taskName)
+
 		err = core.RunTask(runner, config, *taskName)
 		if err != nil {
 			fail(err)
 		} else {
-			fmt.Println(ansi.Color("Tasks completed successfully", "green"))
+			//fmt.Println(ansi.Color("Tasks completed successfully", "green"))
+			printOutput("Tasks completed successfully")
 		}
 	}
 }
@@ -76,6 +95,8 @@ func checkFlags() {
 }
 
 func fail(err error) {
-	fmt.Println(ansi.Color(fmt.Sprintf("Task failed: %v", err), "red"))
+	//fmt.Println(ansi.Color(fmt.Sprintf("Task failed: %v", err), "red"))
+	printError("Task failed: %v", err)
+
 	os.Exit(1)
 }
